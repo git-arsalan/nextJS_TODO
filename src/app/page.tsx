@@ -12,11 +12,46 @@ const [IdVal,inputIdVal] = useState(0);
 // function
   const addTodo = ()=>
   {
+    let obj:any = todos.find(item => item.id == IdVal)
+   // console.log(obj)
+    if (obj)
+    {
+      let newArray = todos.filter(item => item.id !== obj.id)
+      setTodos([...newArray,{todo:userVal, id:IdVal}]) // appending edited object in todos
+      inputVal("");
+      inputIdVal(0);
+      return
+
+    }
     
-    setTodos([...todos,{todo:userVal, id:IdVal}]) // appending new object in todos
-    inputVal("");
-    inputIdVal(0);
+      setTodos([...todos,{todo:userVal, id:IdVal}]) // appending new object in todos
+      inputVal("");
+      inputIdVal(0);
+    
+   
   }
+
+  const editItem = (id:any) => 
+  {
+    let obj:any = todos.find(item => item.id == id)
+    //console.log(obj);
+    
+    inputVal(obj.todo);
+    inputIdVal(obj.id);
+  }
+
+  const deleteItem = (id:any) =>
+  {
+    let obj:any = todos.find(item => item.id == id)
+    if (obj)
+    {
+      let newArray = todos.filter(item => item.id !== obj.id)
+      setTodos([...newArray])
+    }
+   // inputVal(obj.todo);
+    //inputIdVal(obj.id);
+  }
+
 // function
 
   return (
@@ -46,7 +81,8 @@ const [IdVal,inputIdVal] = useState(0);
             <div key={_index +1} className="shadow p-4">
             <div className="flex justify-between text-lg">
              <span className="shadow rounded-full h-8 w-8 text-center my-auto">{_index+1}</span>
-             <span className="shadow rounded-full h-8 w-8 text-center my-auto cursor-pointer text-red-700">x</span>
+             <span onClick={()=>deleteItem(_item.id)}
+                    className="shadow rounded-full h-8 w-8 text-center my-auto cursor-pointer text-red-700">x</span>
             </div>
              {/* Data Div*/}
    
@@ -54,7 +90,7 @@ const [IdVal,inputIdVal] = useState(0);
                  {_item.todo}
              </div>
              <div>
-               <h2 className="text-right cursor-pointer">Edit</h2>
+               <h2 onClick={()=>editItem(_item.id)} className="text-right cursor-pointer">Edit</h2>
              </div>
              {/* Data div end*/}
    
