@@ -1,9 +1,18 @@
 'use client'
+
 import { useEffect, useState } from "react";
 
 export default function Home() {
   // define state
-const [todos,setTodos] = useState([]);
+  interface todo
+  {
+    id:number,
+    content:string | "",
+    is_finished:boolean
+  }
+
+  const mytodo = {} as todo;
+const [todos,setTodos] = useState([mytodo]);
 
 
 
@@ -48,11 +57,12 @@ useEffect(()=>{
 
   const editItem = (id:any) => 
   {
-    // let obj:any = todos.find(item => item.id == id)
-    // //console.log(obj);
+   // let obj = {} as todo;
+    let obj = todos?.find(item => item.id == id)
+    //console.log(obj);
     
-    // inputVal(obj.todo);
-    // inputIdVal(obj.id);
+    inputVal(obj!.content);
+    inputIdVal(obj!.id);
   }
 
   const deleteItem = (id:any) =>
