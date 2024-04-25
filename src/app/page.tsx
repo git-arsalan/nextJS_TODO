@@ -1,6 +1,9 @@
 'use client'
 
 import { useEffect, useState } from "react";
+import { toast } from 'react-hot-toast';
+
+
 
 export default function Home() {
   // define state
@@ -34,8 +37,38 @@ useEffect(()=>{
 },[])
 
 // function
-  const addTodo = ()=>
+  const addTodo = async (id:number, content:string)=>
   {
+    console.log(id , content);
+    const res = await fetch('http://localhost:8000/Insertodos/',{
+      method:"POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body:JSON.stringify({
+        "id": id,
+        "content": content,
+        "is_finished": false
+      })
+  })
+  if(res.ok){
+      toast.success('Data Insertion Success!',{
+          duration:1500,
+          position:'top-center'
+      })
+      
+      setTimeout(function() {
+        location.reload();
+    }, 1500);
+  }
+  else{
+    console.log(res.status);
+    toast.error('Data Insertion Failed!',{
+        duration:1500,
+        position:'top-center'
+    })
+   // location.reload();
+}
   //   let obj:any = todos.find(item => item.id == IdVal)
   //  // console.log(obj)
   //   if (obj)
@@ -90,7 +123,7 @@ useEffect(()=>{
         className="w-[60%] p-2 ml-4 text-lg border-b focus:outline-none" placeholder="Please Enter Todo Task"></input>
         <input id='txtId' type="text"  value={IdVal} onChange={(e:any)=> inputIdVal(e.target.value)}
         className="w-[20%] p-2 ml-4 text-lg border-b focus:outline-none" placeholder="ID"></input>
-        <button onClick={addTodo}
+        <button onClick={(e:any) => addTodo(IdVal,userVal)}
          className="w-[20%] bg-blue-400  text-white p2 rounded-md hover:bg-blue-800">ADD</button>
       </div>
       {/* text and button div end*/}
